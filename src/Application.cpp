@@ -27,26 +27,36 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    // Best OpenGL documentation: http://docs.gl/
+
+    float positions[6] = {
+        -0.5f, -0.5f,
+         0.0f,  0.5f,
+         0.5f, -0.5f
+    };
+
+    // Modern OpenGL works like a state machine
+
+    // State: Generate Buffer
+    unsigned int buffer; // Id for the generated buffer
+    glGenBuffers(1, &buffer);
+
+    // State: Select buffer
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
+    // State: Populate buffer data
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-
-        /* OPEN GL CODE START */
-
-        // Old Open GL Triangle
-        glBegin(GL_TRIANGLES);
-
-        // Draw triangle in the middle of the window
-        glVertex2d(-0.5f, -0.5f);
-        glVertex2d( 0.0f,  0.5f);
-        glVertex2d( 0.5f, -0.5f);
-
-        // End open gl instruction
-        glEnd();
-
-        /* OPEN GL CODE END */
+        
+        // State: Draw
+        // (MODE, start_vertex, vertex_count)
+        // This will draw the glBindBuffer 
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
